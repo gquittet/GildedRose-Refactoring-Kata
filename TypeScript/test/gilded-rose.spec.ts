@@ -174,4 +174,24 @@ describe('Gilded Rose', function () {
 
     });
 
+    describe('Conjured items', () => {
+        it('should decrease the sellIn of the object', () => {
+            const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 0, 2)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].sellIn).to.equal(-1);
+        });
+
+        it('should decrease the quality after update', () => {
+            const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 20, 2)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(0);
+        });
+
+        it('should never decrease the quality below 0', () => {
+            const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 20, 0)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(0);
+        });
+    });
+
 });
