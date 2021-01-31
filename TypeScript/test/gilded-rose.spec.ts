@@ -68,6 +68,12 @@ describe('Gilded Rose', function () {
             const items = gildedRose.updateQuality();
             expect(items[0].quality).to.equal(3);
         });
+
+        it('should always have a positive quality', () => {
+            const gildedRose = new GildedRose([new Item('Titi', 0, 0)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(0);
+        });
     });
 
     describe('Sulfuras, Hand of Ragnaros', () => {
