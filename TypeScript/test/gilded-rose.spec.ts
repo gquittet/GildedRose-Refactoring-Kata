@@ -9,6 +9,34 @@ describe('Gilded Rose', function () {
         expect(items[0].name).to.equal('foo');
     });
 
+    it('should returns an array on calling updateQuality', () => {
+        const gildedRose = new GildedRose([new Item('Toto', 10, 5), new Item('Tata', 9, 4)]);
+        const result = gildedRose.updateQuality();
+        expect(Array.isArray(result)).to.equal(true);
+    });
+
+    it('should returns an array on calling updateQuality with the same size', () => {
+        const oldItems = [
+            new Item('Toto', 10, 5),
+            new Item('Tata', 9, 4)
+        ];
+        const gildedRose = new GildedRose(oldItems);
+        const result = gildedRose.updateQuality();
+        expect(result.length).to.equal(2);
+    });
+
+    it('should returns an array on calling updateQuality with the same content', () => {
+        const oldItems = [
+            new Item('Toto', 10, 5),
+            new Item('Tata', 9, 4)
+        ];
+        const gildedRose = new GildedRose(oldItems);
+        const result = gildedRose.updateQuality();
+        result.forEach((item, index) => {
+            expect(item.name).to.equal(oldItems[index].name)
+        });
+    });
+
     describe('Common items', () => {
         it('should decrease the sell by date of all object', () => {
             const gildedRose = new GildedRose([new Item('Toto', 10, 5), new Item('Tata', 9, 4)]);
