@@ -9,6 +9,26 @@ describe('Gilded Rose', function () {
         expect(items[0].name).to.equal('foo');
     });
 
+    describe('Sulfuras, Hand of Ragnaros', () => {
+        it('should never decrease the sell by date', () => {
+            const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 5, 80)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].sellIn).to.equal(5);
+        });
+
+        it('should never decrease the quality', () => {
+            const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 5, 80)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(80);
+        });
+
+        it('should never decrease the quality even if it is at 40', () => {
+            const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 5, 40)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(40);
+        });
+    });
+
     // Backstage passes handle only the concert of TAFKAL80ETC
     describe('Backstage passes to a TAFKAL80ETC concert', () => {
         it('should decrease the sellIn of the object', () => {
