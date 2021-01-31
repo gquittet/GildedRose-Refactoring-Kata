@@ -4,6 +4,7 @@ import { AgedBrieItemUpdateStrategy } from "./item/strategies/aged-brie-item-upd
 import { BackstagePassesItemUpdateStrategy } from "./item/strategies/backstage-passes-item-update-strategy";
 import { LegendaryItemUpdateStrategy } from "./item/strategies/legendary-item-update-strategy";
 import { CommonItemUpdateStrategy } from "./item/strategies/common-item-update-strategy";
+import { ConjuredItemUpdateStrategy } from "./item/strategies/conjured-item-update-strategy";
 
 export class Item {
     name: string;
@@ -28,6 +29,7 @@ export class GildedRose {
             'Aged Brie': new AgedBrieItemUpdateStrategy(),
             'Backstage passes': new BackstagePassesItemUpdateStrategy(),
             'Legendary': new LegendaryItemUpdateStrategy(),
+            'Conjured': new ConjuredItemUpdateStrategy(),
             'Common': new CommonItemUpdateStrategy(),
         };
         this.itemUpdater = new ItemUpdater(this.strategies['Common']);
