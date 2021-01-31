@@ -1,3 +1,10 @@
+import { ItemUpdateStrategy } from "./item/item-update-strategy";
+import { ItemUpdater } from "./item/item-updater";
+import { AgedBrieItemUpdateStrategy } from "./item/strategies/aged-brie-item-update-strategy";
+import { BackstagePassesItemUpdateStrategy } from "./item/strategies/backstage-passes-item-update-strategy";
+import { LegendaryItemUpdateStrategy } from "./item/strategies/legendary-item-update-strategy";
+import { CommonItemUpdateStrategy } from "./item/strategies/common-item-update-strategy";
+
 export class Item {
     name: string;
     sellIn: number;
@@ -12,58 +19,36 @@ export class Item {
 
 export class GildedRose {
     items: Array<Item>;
+    private readonly strategies: { [name: string]: ItemUpdateStrategy };
+    private readonly itemUpdater: ItemUpdater;
 
     constructor(items = [] as Array<Item>) {
         this.items = items;
+        this.strategies = {
+            'Aged Brie': new AgedBrieItemUpdateStrategy(),
+            'Backstage passes': new BackstagePassesItemUpdateStrategy(),
+            'Legendary': new LegendaryItemUpdateStrategy(),
+            'Common': new CommonItemUpdateStrategy(),
+        };
+        this.itemUpdater = new ItemUpdater(this.strategies['Common']);
     }
 
     updateQuality() {
-        for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if (this.items[i].quality > 0) {
-                    if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                        this.items[i].quality = this.items[i].quality - 1
-                    }
-                }
-            } else {
-                if (this.items[i].quality < 50) {
-                    this.items[i].quality = this.items[i].quality + 1
-                    if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].sellIn < 11) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
-                        if (this.items[i].sellIn < 6) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
-                    }
-                }
+        return this.items.map(item => {
+            switch (item.name) {
+                case 'Aged Brie':
+                    this.itemUpdater.itemUpdateStrategy = this.strategies['Aged Brie'];
+                    break;
+                case 'Backstage passes to a TAFKAL80ETC concert':
+                    this.itemUpdater.itemUpdateStrategy = this.strategies['Backstage passes'];
+                    break;
+                case 'Sulfuras, Hand of Ragnaros':
+                    this.itemUpdater.itemUpdateStrategy = this.strategies['Legendary'];
+                    break;
+                default:
+                    this.itemUpdater.itemUpdateStrategy = this.strategies['Common'];
             }
-            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].sellIn = this.items[i].sellIn - 1;
-            }
-            if (this.items[i].sellIn < 0) {
-                if (this.items[i].name != 'Aged Brie') {
-                    if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].quality > 0) {
-                            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                                this.items[i].quality = this.items[i].quality - 1
-                            }
-                        }
-                    } else {
-                        this.items[i].quality = this.items[i].quality - this.items[i].quality
-                    }
-                } else {
-                    if (this.items[i].quality < 50) {
-                        this.items[i].quality = this.items[i].quality + 1
-                    }
-                }
-            }
-        }
-
-        return this.items;
+            return this.itemUpdater.updateQuality(item);
+        });
     }
 }
