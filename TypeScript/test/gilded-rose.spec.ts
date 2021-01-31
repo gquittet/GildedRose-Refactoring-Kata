@@ -9,6 +9,39 @@ describe('Gilded Rose', function () {
         expect(items[0].name).to.equal('foo');
     });
 
+    describe('Common items', () => {
+        it('should decrease the sell by date of all object', () => {
+            const gildedRose = new GildedRose([new Item('Toto', 10, 5), new Item('Tata', 9, 4)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].sellIn).to.equal(9);
+            expect(items[1].sellIn).to.equal(8);
+        });
+
+        it('should decrease the sell by date', () => {
+            const gildedRose = new GildedRose([new Item('Toto', 10, 5)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].sellIn).to.equal(9);
+        });
+
+        it('should set a negative sell by date when it has passed', () => {
+            const gildedRose = new GildedRose([new Item('Tata', 0, 5)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].sellIn).to.equal(-1);
+        });
+
+        it('should decrease the quality', () => {
+            const gildedRose = new GildedRose([new Item('Tata', 10, 5)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(4);
+        });
+
+        it('should decrease the quality by 2 if the sell by date has passed', () => {
+            const gildedRose = new GildedRose([new Item('Titi', 0, 5)]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(3);
+        });
+    });
+
     describe('Sulfuras, Hand of Ragnaros', () => {
         it('should never decrease the sell by date', () => {
             const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 5, 80)]);
