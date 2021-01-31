@@ -47,6 +47,9 @@ export class GildedRose {
                 case 'Sulfuras, Hand of Ragnaros':
                     this.itemUpdater.itemUpdateStrategy = this.strategies['Legendary'];
                     break;
+                case 'Conjured Mana Cake':
+                    this.itemUpdater.itemUpdateStrategy = this.strategies['Conjured'];
+                    break;
                 default:
                     this.itemUpdater.itemUpdateStrategy = this.strategies['Common'];
             }
